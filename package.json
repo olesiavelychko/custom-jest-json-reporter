@@ -1,0 +1,33 @@
+{
+  "name": "custom-jest-json-reporter",
+  "version": "1.1.0",
+  "description": "JSON test results processor for Jest.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "jest --watch"
+  },
+  "jest": {
+    "testResultsProcessor": "."
+  },
+  "jestJsonReporter": {
+    "outputFile": "results.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olesiavelychko/custom-jest-json-reporter.git"
+  },
+  "homepage": "https://github.com/olesiavelychko/custom-jest-json-reporter",
+  "keywords": [
+    "test",
+    "jest",
+    "reporter"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^19.0.2"
+  },
+  "dependencies": {
+    "read-pkg": "^2.0.0"
+  }
+}
