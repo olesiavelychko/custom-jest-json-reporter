@@ -64,7 +64,7 @@ module.exports = (testResults) => {
   }
 
   const testResultsString = JSON.stringify(getResultSet())
-  const fileName = 'smoketest' + '_' + packagedData.name + '_' + packagedData.version + '_' + 'build' + '-' + '1' + '_' + timeStamp() + '.json'
+  const fileName = 'unitTest' + '_' + packagedData.name + '_' + packagedData.version + '_' + 'build' + '-' + '1' + '_' + timeStamp() + '.json'
 
   const filepath = path.join(getDir(), fileName)
 
