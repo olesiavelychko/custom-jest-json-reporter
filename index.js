@@ -9,32 +9,36 @@ module.exports = (testResults) => {
   const packagedData = readPkg.sync(process.cwd())
   const resultSet = []
 
-  suites.forEach(function(suite) {
+// Get result to write in report
+  function getResultSet() {
 
-    Object.keys(suite).forEach(function(testName){
-      const test = suite[testName]
-      const testCase = {}
+    suites.forEach(function(suite) {
 
-      testCase.test_purpose = 'unit test'
-      testCase.test_suite_name = test.fullName
-      testCase.test_case = test.title
-      testCase.test_status = test.status
+      Object.keys(suite).forEach(function(testName){
+        const test = suite[testName]
+        const testCase = {}
 
-      if (test.failureMessages.length != 0) {
-        testCase.error_description = test.failureMessages
-      }
+        testCase.test_purpose = 'unit test'
+        testCase.test_suite_name = test.fullName
+        testCase.test_case = test.title
+        testCase.test_status = test.status
 
-      testCase.test_duration = test.duration
+        if (test.failureMessages.length != 0) {
+          testCase.error_description = test.failureMessages
+        }
 
-      testCase.project_name = packagedData.name
-      testCase.project_version = packagedData.version
-      // testCase.build_number
-      // testCase.branch_name
+        testCase.test_duration = test.duration
 
-      resultSet.push(testCase)
+        testCase.project_name = packagedData.name
+        testCase.project_version = packagedData.version
+        // testCase.build_number
+        // testCase.branch_name
+
+        resultSet.push(testCase)
+      })
+      return resultSet
     })
-    return resultSet
-  })
+  }
 
 // get timestamp
   function timeStamp () {
@@ -44,12 +48,25 @@ module.exports = (testResults) => {
     return date.join('') + '-' + time.join('')
   }
 
+// Create directory or use already excisted
+  function getDir() {
+    const dir = './reports'
+    try {
+      if (!fs.existsSync(dir)) {
+        console.log('Creating ' + dir + ' directory')
+        fs.mkdirSync(dir)
+      } else
+      console.log('Directory ' + dir + ' is exist')
+      return dir
+    } catch(e) {
+    if (e) throw e;
+    }
+  }
 
-  const testResultsString = JSON.stringify(resultSet)
-  const dir = './reports'
+  const testResultsString = JSON.stringify(getResultSet())
   const fileName = 'smoketest' + '_' + packagedData.name + '_' + packagedData.version + '_' + 'build' + '-' + '1' + '_' + timeStamp() + '.json'
 
-  const filepath = path.join(dir, fileName)
+  const filepath = path.join(getDir(), fileName)
 
   fs.writeFile(filepath, testResultsString, (err) => {
     if (err) {
