@@ -9,36 +9,32 @@ module.exports = (testResults) => {
   const packagedData = readPkg.sync(process.cwd())
   const resultSet = []
 
-// Get result to write in report
-  function getResultSet() {
+  suites.forEach(function(suite) {
 
-    suites.forEach(function(suite) {
+    Object.keys(suite).forEach(function(testName){
+      const test = suite[testName]
+      const testCase = {}
 
-      Object.keys(suite).forEach(function(testName){
-        const test = suite[testName]
-        const testCase = {}
+      testCase.test_purpose = 'unit test'
+      testCase.test_suite_name = test.fullName
+      testCase.test_case = test.title
+      testCase.test_status = test.status
 
-        testCase.test_purpose = 'unit test'
-        testCase.test_suite_name = test.fullName
-        testCase.test_case = test.title
-        testCase.test_status = test.status
+      if (test.failureMessages.length != 0) {
+        testCase.error_description = test.failureMessages
+      }
 
-        if (test.failureMessages.length != 0) {
-          testCase.error_description = test.failureMessages
-        }
+      testCase.test_duration = test.duration
 
-        testCase.test_duration = test.duration
+      testCase.project_name = packagedData.name
+      testCase.project_version = packagedData.version
+      // testCase.build_number
+      // testCase.branch_name
 
-        testCase.project_name = packagedData.name
-        testCase.project_version = packagedData.version
-        // testCase.build_number
-        // testCase.branch_name
-
-        resultSet.push(testCase)
-      })
-      return resultSet
+      resultSet.push(testCase)
     })
-  }
+    return resultSet
+  })
 
 // get timestamp
   function timeStamp () {
@@ -63,7 +59,7 @@ module.exports = (testResults) => {
     }
   }
 
-  const testResultsString = JSON.stringify(getResultSet())
+  const testResultsString = JSON.stringify(resultSet)
   const fileName = 'unitTest' + '_' + packagedData.name + '_' + packagedData.version + '_' + 'build' + '-' + '1' + '_' + timeStamp() + '.json'
 
   const filepath = path.join(getDir(), fileName)
