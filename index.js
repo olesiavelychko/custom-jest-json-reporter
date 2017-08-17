@@ -15,21 +15,21 @@ module.exports = (testResults) => {
       const test = suite[testName]
       const testCase = {}
 
-      testCase.test_purpose = 'unit test'
-      testCase.test_suite_name = test.fullName
+      testCase.test_type = 'UNIT'
+      testCase.test_module = test.fullName
       testCase.test_case = test.title
-      testCase.test_status = test.status
+      testCase.status = test.status
 
       if (test.failureMessages.length != 0) {
         testCase.error_description = test.failureMessages
       }
 
-      testCase.test_duration = test.duration
+      testCase.duration = test.duration
 
       testCase.project_name = packagedData.name
       testCase.project_version = packagedData.version
-      // testCase.build_number
-      // testCase.branch_name
+      testCase.build_number    = '0.0.1'
+      testCase.branch_name     = 'master'
 
       resultSet.push(testCase)
     })
