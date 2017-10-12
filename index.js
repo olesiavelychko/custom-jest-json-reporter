@@ -9,6 +9,7 @@ module.exports = (testResults) => {
   const packagedData = readPkg.sync(process.cwd())
   const resultSet = []
   const readVeniceFile = fs.readFileSync("./venice.json")
+  const version = JSON.parse(readVeniceFile)
 
   console.log("EEEEE " + readVeniceFile)
 
@@ -31,7 +32,7 @@ module.exports = (testResults) => {
 
       testCase.project_name = packagedData.name
       testCase.project_version = packagedData.version
-      testCase.build_number    = readVeniceFile["build"]["branches"]["release"]["version"]
+      testCase.build_number    = version.build.branches.release.version
       testCase.branch_name     = 'master'
 
       resultSet.push(testCase)
@@ -63,7 +64,7 @@ module.exports = (testResults) => {
   }
 
   const testResultsString = JSON.stringify(resultSet)
-  const fileName = 'unitTest' + '_' + packagedData.name + '_' + packagedData.version + '_' + readVeniceFile["build"]["branches"]["release"]["version"] + '-' + '1' + '_' + timeStamp() + '.json'
+  const fileName = 'unitTest' + '_' + packagedData.name + '_' + packagedData.version + '_' + version.build.branches.release.version + '-' + '1' + '_' + timeStamp() + '.json'
 
   const filepath = path.join(getDir(), fileName)
 
